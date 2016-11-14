@@ -8,6 +8,7 @@ public class nQueens {
     static double searchCost = 0;
 
     public static void main(String[] args) {
+        BoardState.queenAmt = queenAmt;
         menu();
     }
 

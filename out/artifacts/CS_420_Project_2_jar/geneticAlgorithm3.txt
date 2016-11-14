@@ -1,0 +1,38 @@
+Hello user, welcome to this N-Queens randomly generated problem solver.
+What would you like to do?
+1) Solve a Randomly Generated N-Queens board with Steepest Hill-Climbing Algorithm.
+2) Solve a Randomly Generated N-Queens board with a Genetic Algorithm.
+3) 101 Cases Steepest Hill-Climbing Algorithm Analysis.
+4) 101 Cases Genetic Algorithm Analysis.
+2
+How many randomly generated states should we start with?: 
+16
+How many states should be selected from the initial group? (Only positive and even ints): 
+16
+How many digits should we crossover between each pair?: 
+4
+Vulnerable Queens: 0
+Board State Array: 
+3 6 13 17 14 12 10 7 2 15 18 1 9 0 5 8 11 16 4 
+Game Board: 
+ -  |-|  -   Q   -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  
+ -  |-|  -  |-|  -  |-|  Q  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  
+ -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -   Q   -  |-|  -  |-|  -  
+ -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -   Q   -  
+ -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  Q  |-|  -  |-|  -  
+ -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  Q  |-|  -  |-|  -  |-|  -  
+ -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  Q  |-|  -  |-|  -  |-|  -  |-|  -  
+ -  |-|  -  |-|  -  |-|  -   Q   -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  
+ -  |-|  Q  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  
+ -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -   Q   -  |-|  -  
+ -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  Q  
+ -   Q   -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  
+ -  |-|  -  |-|  -  |-|  -  |-|  -   Q   -  |-|  -  |-|  -  |-|  -  |-|  -  
+ Q  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  
+ -  |-|  -  |-|  -   Q   -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  
+ -  |-|  -  |-|  -  |-|  -  |-|  Q  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  
+ -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -   Q   -  |-|  -  |-|  -  |-|  -  
+ -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  Q  |-|  -  
+ -  |-|  -  |-|  Q  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  |-|  -  
+
+Process finished with exit code 0
