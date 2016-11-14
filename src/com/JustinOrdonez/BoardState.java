@@ -1,5 +1,6 @@
 package com.JustinOrdonez;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Random;
 
@@ -99,8 +100,18 @@ public class BoardState implements Comparator<BoardState> {
         return stateArray;
     }
 
+    public static BoardState stateCrossoverCreateChild(BoardState state1, BoardState state2, int crossOverAmt){
+        BoardState child = new BoardState(state1);
+
+        for(int i=0; i < crossOverAmt; i++){
+            child.setStateArrayElement(i,state2.getStateArray()[i]);
+        }
+
+        return child;
+    }
+
     @Override
     public int compare(BoardState o1, BoardState o2) {
-        return o2.attackingQueenAmt - o1.attackingQueenAmt;
+        return o1.attackingQueenAmt - o2.attackingQueenAmt;
     }
 }
