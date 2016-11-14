@@ -1,6 +1,5 @@
 package com.JustinOrdonez;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Random;
 
@@ -76,16 +75,6 @@ public class BoardState implements Comparator<BoardState> {
 
         attackingQueenAmt = boardState.attackingQueenAmt;
     }
-
-//    static int[] cloneArray(int[] array){
-//        int[] clone = new int[array.length];
-//
-//        for(int i=0; i < array.length; i++){
-//            clone[i] = array[i];
-//        }
-//
-//        return clone;
-//    }
 
     public void setStateArrayElement(int index, int value){
         stateArray[index] = value;
