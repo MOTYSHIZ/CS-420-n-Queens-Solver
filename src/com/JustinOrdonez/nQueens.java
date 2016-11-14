@@ -1,30 +1,50 @@
 package com.JustinOrdonez;
 
 import java.util.Arrays;
+import java.util.PriorityQueue;
 import java.util.Random;
+import java.util.Scanner;
+import java.util.Comparator;
 
 
 public class nQueens {
-    static final int QUEENAMT = 19;
-    static boolean[][] currentBoard = new boolean[QUEENAMT][QUEENAMT];
-
+    static int queenAmt = 19;
 
     public static void main(String[] args) {
-	    printBoardStateArray(getStateArray(generateBoard()));
-        printBoard(currentBoard);
-        getAttackingQueenAmt(getStateArray(currentBoard));
-        hillClimb();
-
+        menu();
     }
 
-    static boolean[][] generateBoard(){
-        Random rand = new Random();
+    static void menu(){
+        Scanner kb = new Scanner(System.in);
 
-        for(int i = 0; i < QUEENAMT; i++) {
-            currentBoard[i][rand.nextInt(QUEENAMT)] = true;
+        System.out.println("Hello user, welcome to this N-Queens randomly generated problem solver." +
+                "\nWhat would you like to do?" +
+                "\n1) Solve a Randomly Generated N-Queens board with Steepest Hill-Climbing Algorithm. " +
+                "\n2) Solve a Randomly Generated N-Queens board with a genetic algorithm.");
+        String input = kb.nextLine();
+
+        switch(input){
+            case "1":
+                hillClimbHandler();
+                break;
+            case "2":
+                geneticAlgorithmHandler();
+                break;
+            default:
+                System.out.println("Invalid Input.");
+                menu();
+        }
+    }
+
+    static int[] generateBoard(){
+        Random rand = new Random();
+        int[] board = new int[queenAmt];
+
+        for(int i = 0; i < queenAmt; i++) {
+            board[i] = rand.nextInt(queenAmt);
         }
 
-        return currentBoard;
+        return board;
     }
 
     static int getAttackingQueenAmt(int[] stateArray){
@@ -42,97 +62,118 @@ public class nQueens {
         return attackingQueenAmt;
     }
 
-    static void hillClimb(){
-        int[] currentStateArray = getStateArray(currentBoard);
-        int maxNetDecrease = 0;
-        int[] candidateArray = currentStateArray;
+    static void hillClimbHandler(){
+        BoardState randomBoard = new BoardState();
+        randomBoard.printBoardStateArray();
+        randomBoard.printBoard();
+        System.out.println("Starting amount of vulnerable queens: " + randomBoard.attackingQueenAmt + "\n");
+        hillClimb(randomBoard);
+    }
+
+    static void hillClimb(BoardState currentState){
+        int maxNetDecrease;
+        BoardState candidateBoard = new BoardState(currentState);
 
         do {
-            currentStateArray = cloneArray(candidateArray);
+            currentState.cloneBoard(candidateBoard);
             maxNetDecrease = 0;
-            for(int i=0;i < currentStateArray.length;i++){
-                int[] exploringArray = cloneArray(currentStateArray);
 
-                for(int j = 0; j < currentStateArray.length; j++){
-                    int currentAttackingQueenAmt = getAttackingQueenAmt(currentStateArray);
+            for(int i=0;i < currentState.getStateArray().length;i++){
+                BoardState exploringBoard = new BoardState(currentState);
 
-                    if(j != currentStateArray[i]){
-                        exploringArray[i] = j;
-                        int exploringAttackingQueenAmt = getAttackingQueenAmt(exploringArray);
-                        int netDecrease = currentAttackingQueenAmt - exploringAttackingQueenAmt;
+                for(int j = 0; j < currentState.getStateArray().length; j++){
+                    if(j != currentState.getStateArrayElement(i)){
+                        exploringBoard.setStateArrayElement(i,j);
+                        int netDecrease = currentState.attackingQueenAmt - exploringBoard.attackingQueenAmt;
 
                         if(netDecrease > maxNetDecrease){
                             maxNetDecrease = netDecrease;
-                            candidateArray = cloneArray(exploringArray);
+                            candidateBoard.cloneBoard(exploringBoard);
                         }
-
                     }
                 }
             }
-        }while(!Arrays.equals(candidateArray, currentStateArray));
 
-        printBoardStateArray(candidateArray);
-        System.out.println("Vulnerable Queens: " + getAttackingQueenAmt(candidateArray));
-        printBoard(candidateArray);
+        }while(!Arrays.equals(candidateBoard.getStateArray(), currentState.getStateArray()));
+
+        candidateBoard.printBoardStateArray();
+        System.out.println("Resulting amount of vulnerable queens: " + candidateBoard.attackingQueenAmt);
+        //candidateBoard.printBoard();
     }
 
-    static void printBoard(boolean[][] boardState){
-        for(int i = 0; i < boardState.length; i++){
-            for(int j = 0; j < boardState[i].length; j++){
-                if(boardState[i][j] != true && j % 2 == 1){
-                    System.out.print("|-| ");
-                } else if(boardState[i][j] != true && j % 2 == 0){
-                    System.out.print(" -  ");
-                } else {
-                    System.out.print(" Q  ");
-                }
-            }
-            System.out.println();
+    static void geneticAlgorithmHandler(){
+        Scanner kb = new Scanner(System.in);
+
+        System.out.println("How many randomly generated states should we start with? (Only positive, even ints): ");
+        int startingStateAmt = kb.nextInt();
+
+        System.out.println("How many states should be selected from the initial group?: ");
+        int selectionAmt = kb.nextInt();
+
+        System.out.println("How many digits should we crossover between each pair?: ");
+        int crossOverAmt = kb.nextInt();
+
+        if(startingStateAmt % 2 == 0 && startingStateAmt > 0
+                && crossOverAmt < queenAmt
+                && selectionAmt < startingStateAmt){
+            geneticAlgorithm(startingStateAmt, selectionAmt, crossOverAmt);
+        }else{
+            invalidInput();
+        }
+
+
+    }
+
+    static void geneticAlgorithm(int startingStateAmt, int selectionAmt, int crossOverAmt){
+        BoardState[] boardStates = new BoardState[startingStateAmt];
+        Comparator<BoardState> boardStateComparator = new BoardState();
+        PriorityQueue pQ = new PriorityQueue(19, boardStateComparator);
+
+        for(int i=0; i < boardStates.length; i++){
+            boardStates[i] = new BoardState();
+            boardStates[i].printBoardStateArray();
+            pQ.add(boardStates[i]);
+        }
+
+//        for(int i=0; i < boardStates.length; i += 2){
+//            stateCrossover(boardStates[i], boardStates[i+1], crossOverAmt);
+//        }
+
+    }
+
+    static void stateCrossover(int[] state1, int[] state2, int crossOverAmt){
+        int[] temp = new int[state1.length];
+
+        for(int i=0; i < crossOverAmt; i++){
+            temp[i] = state1[i];
+            state1[i] = state2[i];
+            state2[i] = temp[i];
         }
     }
 
-    static void printBoard(int[] boardState){
-        for(int i = 0; i < boardState.length; i++){
-            for(int j = 0; j < boardState.length; j++){
-                if(boardState[i] != j && j % 2 == 1){
-                    System.out.print("|-| ");
-                } else if(boardState[i] != j && j % 2 == 0){
-                    System.out.print(" -  ");
-                } else {
-                    System.out.print(" Q  ");
-                }
-            }
-            System.out.println();
-        }
-    }
+//    static void printBoard(boolean[][] boardState){
+//        for(int i = 0; i < boardState.length; i++){
+//            for(int j = 0; j < boardState[i].length; j++){
+//                if(boardState[i][j] != true && j % 2 == 1){
+//                    System.out.print("|-| ");
+//                } else if(boardState[i][j] != true && j % 2 == 0){
+//                    System.out.print(" -  ");
+//                } else {
+//                    System.out.print(" Q  ");
+//                }
+//            }
+//            System.out.println();
+//        }
+//        System.out.println();
+//    }
 
-    static void printBoardStateArray(int[] boardState){
-        for(int x: boardState){
-            System.out.print(x + " ");
-        }
-        System.out.println();
-    }
 
-    static int[] getStateArray(boolean[][] boardState){
-        int[] stateArray = new int[boardState.length];
 
-        for(int i = 0; i < boardState.length; i++){
-            for(int j = 0; j < boardState[i].length; j++){
-                if(boardState[i][j] == true){
-                    stateArray[i] = j;
-                }
-            }
-        }
-        return stateArray;
-    }
 
-    static int[] cloneArray(int[] array){
-        int[] clone = new int[array.length];
 
-        for(int i=0; i < array.length; i++){
-            clone[i] = array[i];
-        }
 
-        return clone;
+    static void invalidInput(){
+        System.out.println("Invalid input. Come back when you're willing to follow directions.");
+        System.exit(0);
     }
 }
